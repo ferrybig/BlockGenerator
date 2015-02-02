@@ -32,6 +32,7 @@ public class BlockGenerator {
         Color foreground = Color.BLUE.brighter();
         Color backgroundPad = background.darker().darker();
         Color foregroundPad = foreground.darker().darker();
+        boolean skipCorners = false;
 
         Random random = new Random();
         boolean[][] grid = new boolean[pictureSizeX][pictureSizeY];
@@ -142,7 +143,7 @@ public class BlockGenerator {
                     g2.setColor(paddingColor);
  
                     // top-left
-                    if (subGrid[0][0]) {
+                    if (subGrid[0][0] && !skipCorners) {
                         g2.fillRect(
                             x * squareSize,
                             y * squareSize,
@@ -160,7 +161,7 @@ public class BlockGenerator {
                     }
 
                     // top-right
-                    if (subGrid[2][0]) {
+                    if (subGrid[2][0] && !skipCorners) {
                         g2.fillRect(
                             x * squareSize + squareSize - paddingSize,
                             y * squareSize,
@@ -188,7 +189,7 @@ public class BlockGenerator {
                     }
 
                     // bottom-left 
-                    if (subGrid[0][2]) {
+                    if (subGrid[0][2] && !skipCorners) {
                         g2.fillRect(
                             x * squareSize,
                             y * squareSize + squareSize - paddingSize,
@@ -206,7 +207,7 @@ public class BlockGenerator {
                     }
 
                     // bottom-right 
-                    if (subGrid[2][2]) {
+                    if (subGrid[2][2] && !skipCorners) {
                         g2.fillRect(
                             x * squareSize + squareSize - paddingSize,
                             y * squareSize + squareSize - paddingSize,
