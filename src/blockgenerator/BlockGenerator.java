@@ -19,40 +19,35 @@ import javax.imageio.ImageIO;
  */
 public class BlockGenerator {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws IOException {
-        int pictureSizeX = 64;
-        int pictureSizeY = 64;
-        int squareSize = 16;
-        int paddingSize = 3;
-        //int roundedCornerSize = 0;
-        Color background = Color.ORANGE.brighter();
-        Color foreground = Color.BLUE.brighter();
-        Color backgroundPad = background.darker().darker();
-        Color foregroundPad = foreground.darker().darker();
-        boolean skipCorners = false;
+    private final int pictureSizeX = 64;
+    private final int pictureSizeY = 64;
+    private final int squareSize = 16;
+    private final int paddingSize = 3;
+    //private final int roundedCornerSize = 0;
+    private final Color background = Color.decode("#bfcfa0");
+    private final Color foreground = Color.decode("#34403c");
+    private final Color backgroundPad = background.darker().darker();
+    private final Color foregroundPad = foreground.darker().darker();
+    private final boolean skipCorners = false;
 
+    public BlockGenerator() {
+    }
+
+    private boolean[][] createGrid() {
         Random random = new Random();
         boolean[][] grid = new boolean[pictureSizeX][pictureSizeY];
 
         for (int y = 0; y < pictureSizeY; y++) {
             double change = Math.min(1, Math.max(0, (Math.abs(y - 31.5) - 10)
                 / 21.0));
-            System.out.println(change);
             for (int x = 0; x < pictureSizeX; x++) {
                 grid[x][y] = random.nextDouble() < change;
             }
         }
+        return grid;
+    }
 
-        for (int x = 0; x < pictureSizeY; x++) {
-            for (int y = 0; y < pictureSizeX; y++) {
-                System.out.print(grid[x][y] ? '#' : ' ');
-            }
-            System.out.println();
-        }
-
+    private boolean[][] removeUnneededFields(boolean[][] grid) {
         int changed;
         final int pictureSizeYMinusOne = pictureSizeY - 1;
         final int pictureSizeXMinusOne = pictureSizeX - 1;
@@ -65,7 +60,7 @@ public class BlockGenerator {
                     int yMinusOne = y < 1 ? pictureSizeYMinusOne : y - 1;
                     int xPlusOne = x == pictureSizeXMinusOne ? 0 : x + 1;
                     int xMinusOne = x == 0 ? pictureSizeXMinusOne : x - 1;
-                    
+
                     boolean top = grid[x][yPlusOne];
                     boolean bottom = grid[x][yMinusOne];
                     boolean left = grid[xMinusOne][y];
@@ -83,18 +78,15 @@ public class BlockGenerator {
                 }
             }
             grid = newGrid;
-            System.out.println("Changed:" + changed);
         } while (changed > 0);
+        return grid;
+    }
 
-        for (int x = 0; x < grid[0].length; x++) {
-            for (int y = 0; y < grid.length; y++) {
-                System.out.print(grid[x][y] ? '#' : ' ');
-            }
-            System.out.println();
-        }
-
-        boolean[][][][] graphicGrid = 
-            new boolean[pictureSizeY][pictureSizeX][3][3];
+    private boolean[][][][] preRender(boolean[][] grid) {
+        final int pictureSizeYMinusOne = pictureSizeY - 1;
+        final int pictureSizeXMinusOne = pictureSizeX - 1;
+        boolean[][][][] graphicGrid
+            = new boolean[pictureSizeY][pictureSizeX][3][3];
         for (int x = 0; x < pictureSizeY; x++) {
             for (int y = 0; y < pictureSizeX; y++) {
 
@@ -120,7 +112,10 @@ public class BlockGenerator {
                 subGrid[2][2] = grid[xPlusOne][yPlusOne] == toFind;
             }
         }
+        return graphicGrid;
+    }
 
+    private BufferedImage render(boolean[][][][] graphicGrid) {
         BufferedImage img = new BufferedImage(
             pictureSizeX * squareSize,
             pictureSizeY * squareSize,
@@ -141,7 +136,7 @@ public class BlockGenerator {
                         squareSize,
                         squareSize);
                     g2.setColor(paddingColor);
- 
+
                     // top-left
                     if (subGrid[0][0] && !skipCorners) {
                         g2.fillRect(
@@ -150,7 +145,7 @@ public class BlockGenerator {
                             paddingSize,
                             paddingSize);
                     }
-                    
+
                     // top-center
                     if (subGrid[1][0]) {
                         g2.fillRect(
@@ -169,7 +164,6 @@ public class BlockGenerator {
                             paddingSize);
                     }
 
-                    
                     // center-left 
                     if (subGrid[0][1]) {
                         g2.fillRect(
@@ -219,6 +213,19 @@ public class BlockGenerator {
         } finally {
             g2.dispose();
         }
+        return img;
+    }
+
+    public BufferedImage fullRender() {
+        return render(preRender(removeUnneededFields(createGrid())));
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) throws IOException {
+        BlockGenerator generator = new BlockGenerator();
+        BufferedImage img = generator.fullRender();
         File outputfile = new File("render.png");
         ImageIO.write(img, "png", outputfile);
     }
