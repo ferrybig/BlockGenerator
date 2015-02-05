@@ -17,11 +17,11 @@ public class MultiColor {
         this.sideColor = sideColor;
     }
 
-    public Color getMainColor(int x) {
+    public Color getMainColor() {
         return mainColor;
     }
 
-    public Color getSideColor(int x) {
+    public Color getSideColor() {
         return sideColor;
     }
 
