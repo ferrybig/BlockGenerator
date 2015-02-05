@@ -6,15 +6,18 @@
 
 package blockgenerator;
 
+import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 
-public class SolidColorPattern implements ColorPattern{
+public class GradientColorPattern implements ColorPattern {
+
     private final int x;
     private final int y;
     
     private final MultiColor color;
 
-    public SolidColorPattern(int x, int y, MultiColor color) {
+    public GradientColorPattern(int x, int y, MultiColor color) {
         this.x = x;
         this.y = y;
         this.color = color;
@@ -47,7 +50,11 @@ public class SolidColorPattern implements ColorPattern{
 
     @Override
     public void renderPattern(MultiColor other, Graphics2D target, int xOffset) {
-        target.setColor(this.color.getMainColor());
+        GradientPaint c = new GradientPaint(xOffset, 0, other.getMainColor(), x, y,
+        this.color.getMainColor());
+        target.setPaint(c);
         target.fillRect(xOffset, 0, x, y);
     }
+    
+
 }
