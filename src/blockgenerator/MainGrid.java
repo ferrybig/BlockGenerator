@@ -53,6 +53,9 @@ public class MainGrid {
         }
         return img;
     }
+    public void render(Graphics2D g2) {
+        renderPatterns(g2);
+    }
 
     private void renderPatterns(Graphics2D g2) {
         int x = 0;
