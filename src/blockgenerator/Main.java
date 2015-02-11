@@ -14,13 +14,20 @@ import javax.imageio.ImageIO;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        MultiColor sides = new MultiColor(Color.yellow, Color.yellow.darker().darker());
-        MultiColor middle = new MultiColor(Color.orange, Color.orange.darker().darker());
+        MultiColor border = new MultiColor(Color.yellow, Color.yellow.darker().darker());
+        MultiColor sides = new MultiColor(Color.orange, Color.orange.darker().darker());
+        MultiColor middle = new MultiColor(Color.red, Color.red.darker().darker());
+        int height = 128;
+        int squareSize = 8;
+        int paddingSize = 2;
+        boolean skipBorders = true;
         MainGrid grid = new MainGrid(
-            sides,
-            new BlockPattern(256, 1024, middle, 256 / 16, 1024 / 16, 3, true, false, true),
-            new SolidColorPattern(512, 1024, middle),
-            new BlockPattern(256, 1024, sides, 256 / 16, 1024 / 16, 3, true, false, true)
+                border,
+                new BlockPattern(256, height, sides, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(256, height, middle, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                //new SolidColorPattern(0, height, middle),
+                new BlockPattern(256, height, sides, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(256, height, border, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true)
         );
 
         BufferedImage img = grid.render();
