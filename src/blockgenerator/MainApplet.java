@@ -11,6 +11,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 import javax.swing.JPanel;
 
 /**
@@ -121,12 +122,13 @@ public class MainApplet extends javax.swing.JApplet {
         this.image = new BufferedImage(total, height, BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g2 = this.image.createGraphics();
+        Random random =new Random();
         try {
             MainGrid grid = new MainGrid(
                     colors[0],
-                    new BlockPattern(width[0], height, colors[1], width[0] / 16, height / 16, 3, true, false, true),
+                    new BlockPattern(random, width[0], height, colors[1], width[0] / 16, height / 16, 3, true, false, true),
                     new SolidColorPattern(width[1], height, colors[2]),
-                    new BlockPattern(width[2], height, colors[3], width[2] / 16, height / 16, 3, true, false, true)
+                    new BlockPattern(random, width[2], height, colors[3], width[2] / 16, height / 16, 3, true, false, true)
             );
             grid.render(g2);
         } finally {

@@ -9,25 +9,33 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        MultiColor background = new MultiColor(Color.yellow.darker(), Color.yellow.darker().darker().darker());
         MultiColor border = new MultiColor(Color.yellow, Color.yellow.darker().darker());
         MultiColor sides = new MultiColor(Color.orange, Color.orange.darker().darker());
         MultiColor middle = new MultiColor(Color.red, Color.red.darker().darker());
-        int height = 128;
+        MultiColor heart = new MultiColor(new Color(164,16,16), new Color(164,16,16).darker().darker());
+        int height = 256;
         int squareSize = 8;
         int paddingSize = 2;
         boolean skipBorders = true;
+        Random random = new Random();
         MainGrid grid = new MainGrid(
-                border,
-                new BlockPattern(256, height, sides, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
-                new BlockPattern(256, height, middle, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                background,
+                new BlockPattern(random, 128, height, border, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, sides, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, middle, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, heart, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
                 //new SolidColorPattern(0, height, middle),
-                new BlockPattern(256, height, sides, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
-                new BlockPattern(256, height, border, 256 / squareSize, height / squareSize, paddingSize, skipBorders, false, true)
+                new BlockPattern(random, 128, height, middle, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, sides, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, border, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true),
+                new BlockPattern(random, 128, height, background, 128 / squareSize, height / squareSize, paddingSize, skipBorders, false, true)
         );
 
         BufferedImage img = grid.render();

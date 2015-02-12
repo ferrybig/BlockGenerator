@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class BlockPattern implements ColorPattern {
+    private final Random random;
 
     private final int xSize;
     private final int ySize;
@@ -29,7 +30,8 @@ public class BlockPattern implements ColorPattern {
     private final boolean horizontalWrap;
     private final boolean verticalWrap;
 
-    public BlockPattern(int xSize, int ySize, MultiColor color, int tilesX, int tilesY, int paddingSize, boolean skipCorners, boolean horizontalWrap, boolean verticalWrap) {
+    public BlockPattern(Random random, int xSize, int ySize, MultiColor color, int tilesX, int tilesY, int paddingSize, boolean skipCorners, boolean horizontalWrap, boolean verticalWrap) {
+        this.random = random;
         this.xSize = xSize;
         this.ySize = ySize;
         this.color = color;
@@ -44,7 +46,6 @@ public class BlockPattern implements ColorPattern {
     }
 
     private boolean[][] createGrid() {
-        Random random = new Random();
         boolean[][] grid = new boolean[tilesX][tilesY];
         for (int x = 0; x < tilesX; x++) {
             double change = x * 1.0 / (tilesX - 1);
